@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupListeners() {
         //colocar a acao de click do botao confirmar
         btnConfirmar.setOnClickListener {
-            saveUserLocal(nomeUsuario.toString())
+            saveUserLocal(nomeUsuario.text.toString())
         }
         
     }
@@ -49,13 +50,17 @@ class MainActivity : AppCompatActivity() {
     private fun saveUserLocal(nomeUsuario : String) {
         //@TODO 3 - Persistir o usuario preenchido na editText com a SharedPref no listener do botao salvar
         val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
-        with(sharedPref.edit()) {
-            putString(getString(R.string.user_name), )
+        with (sharedPref.edit()) {
+            putString(getString(R.string.nome_usuario), nomeUsuario)
+            apply()
         }
     }
 
     private fun showUserName() {
         //@TODO 4- depois de persistir o usuario exibir sempre as informacoes no EditText  se a sharedpref possuir algum valor, exibir no proprio editText o valor salvo
+        val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
+        val textoSalvo = sharedPref.getString("user_name", "")
+        Log.d ("XXX ->", textoSalvo.toString())
     }
 
     //Metodo responsavel por fazer a configuracao base do Retrofit
