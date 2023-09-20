@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.igorbag.githubsearch.R
 import br.com.igorbag.githubsearch.data.GitHubService
 import br.com.igorbag.githubsearch.domain.Repository
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     // salvar o usuario preenchido no EditText utilizando uma SharedPreferences
     private fun saveUserLocal(usuario : String) {
-        //@TODO 3 - Persistir o usuario preenchido na editText com a SharedPref no listener do botao salvar
+        //Persistir o usuario preenchido na editText com a SharedPref no listener do botao salvar
         val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
         with (sharedPref.edit()) {
             putString(getString(R.string.user_name), usuario)
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showUserName() {
-        //@TODO 4- depois de persistir o usuario exibir sempre as informacoes no EditText  se a sharedpref possuir algum valor, exibir no proprio editText o valor salvo
+        //depois de persistir o usuario exibir sempre as informacoes no EditText  se a sharedpref possuir algum valor, exibir no proprio editText o valor salvo
         val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
         //val textoSalvo = sharedPref.getString(R.string.user_name.toString(), "")
         val textoSalvo = sharedPref.getString(getString(R.string.user_name), "")
@@ -68,11 +70,17 @@ class MainActivity : AppCompatActivity() {
     //Metodo responsavel por fazer a configuracao base do Retrofit
     fun setupRetrofit() {
         /*
-           @TODO 5 -  realizar a Configuracao base do retrofit
+           realizar a Configuracao base do retrofit
            Documentacao oficial do retrofit - https://square.github.io/retrofit/
            URL_BASE da API do  GitHub= https://api.github.com/
            lembre-se de utilizar o GsonConverterFactory mostrado no curso
         */
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.github.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        githubApi = retrofit.create(GitHubService::class.java)
     }
 
     //Metodo responsavel por buscar todos os repositorios do usuario fornecido
