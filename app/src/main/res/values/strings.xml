@@ -3,4 +3,5 @@
     <string name="nome_usuario">Nome do usuário</string>
     <string name="confirmar">Confirmar</string>
     <string name="user_name">user_name</string>
+    <string name="erro_internet">Sem internet! Verifique!</string>
 </resources>
